@@ -58,3 +58,6 @@ $(document).ready(function() {
 }); 
 // jquery end
 
+setTimeout(function() {
+    $('#message').fadeOut('slow');
+}, 2000); // Auto hide alert after 3 seconds
