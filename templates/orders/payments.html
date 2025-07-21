@@ -16,12 +16,18 @@
         <h5 class="card-header">Billing Address</h5>
         <div class="card-body">
             
-            <p class="card-text mb-0">{{order.full_name}}</p>
-            <p class="card-text mb-0">{{order.full_address}}</p>
-            <p class="card-text mb-0">{{order.city}}, {{order.state}}</p>
-            <p class="card-text mb-0">{{order.country}}</p>
-            <p class="card-text mb-0">{{order.email}}</p>
-            <p class="card-text mb-0">{{order.phone}}</p>
+            <p class="card-text mb-0"><b>Name:</b>{{order.full_name}}</p>
+            <hr class="mb-0">
+            <p class="card-text mb-0"><b>Address:</b>{{order.full_address}}</p>
+             <hr class="mb-0">
+            <p class="card-text mb-0"><b>City:</b>{{order.city}}, {{order.state}}</p>
+             <hr class="mb-0">
+            <p class="card-text mb-0"><b>Country:</b>{{order.country}}</p>
+             <hr class="mb-0">
+            <p class="card-text mb-0"><b>Email:</b>{{order.email}}</p>
+             <hr class="mb-0">
+            <p class="card-text mb-0"><b>Phone Number:</b>{{order.phone}}</p>
+             <hr class="mb-0">
             {% if order.order_note %}
             <b>Order Note:</b> {{order.order_note}}
 
@@ -107,9 +113,47 @@
 			</dl>
 			<hr>
 			<p class="text-center mb-3">
-				<img src="{% static './images/misc/payments.png' %}" height="26">
+				<img src="{% static './images/misc/Paystack_Logo.png' %}" height="26">
 			</p>
-			<a href="{% url 'checkout' %}" class="btn btn-primary btn-block"> Make Payment </a>
+			<button type="button" class="btn btn-primary btn-block" onclick="payWithPaystack()">Make Payment</button>
+
+<script>
+  function payWithPaystack() {
+    var handler = PaystackPop.setup({
+      key: 'pk_test_d951120d20cb3a1819c4c62877d88227b4eb61a8',  // Replace with your public key
+      email: '{{ order.email }}',
+      amount: Number({{ grand_total|floatformat:2 }}) * 100, // kobo
+      currency: "NGN",
+      ref: '{{ order.order_number }}-' + new Date().getTime(),
+        callback: function(response){
+          // Send reference to Django backend to verify
+          fetch("{% url 'verify_payment' %}", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify({
+              reference: response.reference,
+              order_number: "{{ order.order_number }}"
+            })
+          })
+          .then(res => res.json())
+          .then(data => {
+            if (data.status === 'success') {
+              window.location.href = "/orders/payment_success/";
+            } else {
+              alert("Payment verification failed");
+            }
+          });
+      },
+      onClose: function(){
+        alert('Transaction was not completed, window closed.');
+      }
+    });
+    handler.openIframe();
+  }
+</script>
 			
 		</div> <!-- card-body.// -->
 		</div> <!-- card.// -->
