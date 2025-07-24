@@ -83,7 +83,7 @@ def verify_payment(request):
         order_number = data.get("order_number")
 
         headers = {
-            "Authorization": "Bearer sk_test_3f804d8763376de8b1540e398e3b7a26fb1a6601",  # Replace with real key
+            "Authorization": f"Bearer {settings.PAYSTACK_SECRET_KEY}",  # Replace with real key
         }
 
         response = requests.get(f"https://api.paystack.co/transaction/verify/{reference}", headers=headers)

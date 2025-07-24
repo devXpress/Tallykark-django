@@ -13,29 +13,36 @@
 	<main class="col-md-9">
 		<article class="card">
 		<header class="card-header">
-			<strong class="d-inline-block mr-3">Logged in as:</strong>
-			<span>{{user.full_name}}</span>
+			<strong class="d-inline-block mr-3">Your Order History</strong>
+			
 		</header>
 		<div class="card-body">
 			<div class="row"> 
-				
-				<div class="col-md-6">
-					<div class="card" style="text-align: center;">
-						<div class="card-body">
-							<h5 class="card-title">Total Orders</h5>
-							<h4>{{orders_count}}</h4>
-							<a href="{% url 'myOrders' %}">View Orders</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="card" style="text-align: center;">
-						<div class="card-body">
-							<img src="{{userprofile.profile_picture.url}}" alt="User Profile Picture" width="50" height="50" style="border-radius: 50%;">
-							<p class="mb-0">{{user.email}}</p>
-							<p>{{user.phone}}</p>
-						</div>
-					</div>
+				<div class="col-md-12">
+					<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Order #</th>
+      <th scope="col">Billing Name</th>
+      <th scope="col">Phone</th>
+      <th scope="col">Order Total</th>
+      <th scope="col">Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for order in orders %}
+    <tr>
+      <th scope="row"><a href="{% url 'order_details' order.order_number %}">{{order.order_number}}</a></th>
+      <td>{{order.full_name}}</td>
+      <td>{{order.phone}}</td>
+      <td>{{order.order_total}}</td>
+      <td>{{order.created_at}}</td>
+    </tr>
+    {% endfor %}
+   
+    
+  </tbody>
+</table>
 				</div>
 			</div> <!-- row.// -->
 		</div> <!-- card-body .// -->
