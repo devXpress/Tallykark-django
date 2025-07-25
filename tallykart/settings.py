@@ -92,7 +92,7 @@ DATABASES = {
     }
 }
 
-DATABASES['default']= dj_database_url.parse("postgresql://tallymart_user:igBHSo6ejBT5gXIDKgPMqG5z5nJB5k8Y@dpg-d21att7fte5s73fdag3g-a.oregon-postgres.render.com/tallymart")
+#DATABASES['default']= dj_database_url.parse("postgresql://tallymart_user:igBHSo6ejBT5gXIDKgPMqG5z5nJB5k8Y@dpg-d21att7fte5s73fdag3g-a.oregon-postgres.render.com/tallymart")
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
